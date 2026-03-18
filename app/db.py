@@ -9,11 +9,14 @@ DB_PORT = os.getenv("db_port")
 DB_USERNAME = os.getenv("db_username")
 DB_PASSWORD = os.getenv("db_password")
 
-conn = psycopg2.connect(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+# conn = psycopg2.connect(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 
-cur = conn.cursor()
-cur.execute("SELECT * FROM pg_extension WHERE extname = 'vector';")
-rows = cur.fetchall()
-for table in rows:
-    print(table)
-conn.close()
+# cur = conn.cursor()
+# cur.execute("CREATE TABLE Documents(id serial primary key,metadata text,contents text,embeddings vector(1536));")
+# conn.commit()
+# cur.close()
+# conn.close()
+
+def connect_db():
+    connection =  psycopg2.connect(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+    return connection
