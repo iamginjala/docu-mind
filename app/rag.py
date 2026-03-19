@@ -1,6 +1,6 @@
 from typing import TypedDict
 from langgraph.graph import StateGraph, START, END
-from embeddings import search_similar
+from app.embeddings import search_similar
 from google import genai
 import os
 from dotenv import load_dotenv
@@ -20,13 +20,17 @@ def retrieve_chunks(state: DocuMindState) -> dict:
     chunk = search_similar(state["question"])
     return {"chunks":chunk}
 def generate_answer(state: DocuMindState):
+    formatted_history = ""
+    for msg in state['chat_history']:
+        role = "User" if msg["role"] == "user" else "Assistant"
+        formatted_history += f"{role}: {msg['content']}\n"
     prompt = f""" You are a helpful assistant that answers questions based on the provided document context.
 
     CONTEXT:
     {state['chunks']}
 
     CHAT HISTORY:
-    {state['chat_history']}
+    {formatted_history}
 
     CURRENT QUESTION:
     {state['question']}
@@ -65,9 +69,4 @@ graph.add_edge("update_memory", END)
 app = graph.compile()
 
 
-result = app.invoke({
-    "question": "what is the methodology used in their work?",
-    "chunks": [],
-    "answer": "",
-    "chat_history": []
-})
+
