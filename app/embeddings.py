@@ -1,9 +1,9 @@
-from parser import process_document
+from app.parser import process_document
 from google import genai
 from google.genai import types
 import os
 from dotenv import load_dotenv
-from db import connect_db
+from app.db import connect_db
 
 load_dotenv()
 
