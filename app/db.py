@@ -3,11 +3,11 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-DB_NAME = os.getenv("db_name")
+DB_NAME = os.getenv("POSTGRES_DB")
 DB_HOST = os.getenv("db_host")
 DB_PORT = os.getenv("db_port")
-DB_USERNAME = os.getenv("db_username")
-DB_PASSWORD = os.getenv("db_password")
+DB_USERNAME = os.getenv("POSTGRES_USER")
+DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 
 # conn = psycopg2.connect(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 
