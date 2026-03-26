@@ -14,7 +14,7 @@ if uploaded_files and not st.session_state.get("uploaded"):
     st.session_state.uploaded = True
     files = [("files", (file.name, file.getvalue(), file.type)) for file in uploaded_files]
     with st.spinner("Processing your documents..."):
-        r = requests.post("http://localhost:8000/upload", files=files)
+        r = requests.post("http://backend:8000/upload", files=files)
 
         if r.status_code == 200:
             st.success("files processed sucessfully")
@@ -34,7 +34,7 @@ if prompt:
         'ques':prompt,
         'chat_history': st.session_state.messages
     }
-    response = requests.post("http://localhost:8000/ask",json= payload)
+    response = requests.post("http://backend:8000/ask",json= payload)
     answer = response.json()["answer"]
     with st.chat_message("assistant"):
         st.write(answer)
