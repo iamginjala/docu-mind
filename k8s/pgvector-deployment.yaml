@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+spec:
+  replicas: 1
+  selector:
+   matchLabels:
+    app: database
+  template:
+   metadata:
+    labels:
+     app: database  
+   spec:
+    containers:
+     - name: database
+       image: pgvector-local:latest
+       imagePullPolicy: IfNotPresent
+       ports:
+        - containerPort: 5432
+       envFrom:
+        - secretRef:
+           name: docu-mind-secrets
+        - configMapRef:
+           name: docu-mind-config
+       volumeMounts:
+         - name: pgvector-storage
+           mountPath: /var/lib/postgresql/data
+    volumes:
+      - name: pgvector-storage
+        persistentVolumeClaim: 
+         claimName: pgvector-pvc
