@@ -5,14 +5,21 @@ from app.embeddings import generate_embeddings, store_embeddings
 from app.parser import process_document
 from app.rag import app as rag_app
 import os
+from contextlib import asynccontextmanager
+from app.db import init_db
 
 
 class Question(BaseModel):
     ques: str
     chat_history: list = []
 
-app = FastAPI()
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()  # runs when FastAPI starts
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 async def root():
