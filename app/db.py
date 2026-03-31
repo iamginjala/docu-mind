@@ -20,3 +20,19 @@ DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 def connect_db():
     connection =  psycopg2.connect(f"postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
     return connection
+
+def init_db():
+    conn = connect_db()
+    cur = conn.cursor()
+    cur.execute("CREATE EXTENSION IF NOT EXISTS vector;")
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS documents(
+            id serial primary key,
+            metadata text,
+            contents text,
+            embeddings vector(1536)
+        );
+    """)
+    conn.commit()
+    cur.close()
+    conn.close()
